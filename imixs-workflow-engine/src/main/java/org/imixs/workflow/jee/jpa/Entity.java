@@ -34,8 +34,10 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -127,7 +129,7 @@ public class Entity implements java.io.Serializable {
 	private String type;
 	private Calendar created;
 	private Calendar modified;
-	private Map<String,List<Object>> data;
+	private Map<String, List<Object>> data;
 	private List<ReadAccess> readAccessList;
 	private List<WriteAccess> writeAccessList;
 
@@ -136,7 +138,6 @@ public class Entity implements java.io.Serializable {
 	private List<DoubleItem> doubleItems;
 	private List<CalendarItem> calendarItems;
 
-	
 	/**
 	 * A Entity will be automatically initialized with a unique id and a
 	 * creation date.
@@ -145,14 +146,12 @@ public class Entity implements java.io.Serializable {
 		/*
 		 * Generate a new uniqueId
 		 */
-		id=WorkflowKernel.generateUniqueID();
+		id = WorkflowKernel.generateUniqueID();
 		/*
-		String sIDPart1 = Long.toHexString(System.currentTimeMillis());
-		Double d = Math.random() * 900000000;
-		int i = d.intValue();
-		String sIDPart2 = Integer.toHexString(i);
-		id = sIDPart1 + "-" + sIDPart2;
-		*/
+		 * String sIDPart1 = Long.toHexString(System.currentTimeMillis());
+		 * Double d = Math.random() * 900000000; int i = d.intValue(); String
+		 * sIDPart2 = Integer.toHexString(i); id = sIDPart1 + "-" + sIDPart2;
+		 */
 
 		// Initialize objects
 		Calendar cal = Calendar.getInstance();
@@ -177,6 +176,7 @@ public class Entity implements java.io.Serializable {
 	 * @return universal id
 	 */
 	@Id
+	@Column(name = "ID")
 	public String getId() {
 		return id;
 	}
@@ -185,9 +185,6 @@ public class Entity implements java.io.Serializable {
 		id = aID;
 	}
 
-	
-	
-	
 	@Version
 	public Integer getVersion() {
 		return version;
@@ -253,8 +250,7 @@ public class Entity implements java.io.Serializable {
 	}
 
 	/**
-	 * returns the data object part of the Entity represented by a
-	 * java.util.Map
+	 * returns the data object part of the Entity represented by a java.util.Map
 	 * 
 	 * @return Map
 	 */
@@ -269,7 +265,7 @@ public class Entity implements java.io.Serializable {
 	 * 
 	 * @param data
 	 */
-	public void setData(Map<String,List<Object>> itemCol) {
+	public void setData(Map<String, List<Object>> itemCol) {
 		this.data = itemCol;
 	}
 
@@ -279,17 +275,16 @@ public class Entity implements java.io.Serializable {
 	 * @return ReadAccess list for the entity
 	 */
 	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="ENTITY_ID", referencedColumnName="ID")
 	public List<ReadAccess> getReadAccessList() {
-		if (readAccessList==null)
-			readAccessList=new ArrayList<ReadAccess>();
+		if (readAccessList == null)
+			readAccessList = new ArrayList<ReadAccess>();
 		return readAccessList;
 	}
 
 	public void setReadAccessList(List<ReadAccess> readAccessList) {
 		this.readAccessList = readAccessList;
 	}
-	
-	
 
 	/**
 	 * WrateAccess list is loaded lazy as this a check is only on update method
@@ -298,23 +293,24 @@ public class Entity implements java.io.Serializable {
 	 * @return WriteAccess list for the entity
 	 */
 	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name="ENTITY_ID", referencedColumnName="ID")
 	public List<WriteAccess> getWriteAccessList() {
-		if (writeAccessList==null)
-			writeAccessList=new ArrayList<WriteAccess>();
+		if (writeAccessList == null)
+			writeAccessList = new ArrayList<WriteAccess>();
 		return writeAccessList;
 	}
 
 	public void setWriteAccessList(List<WriteAccess> writeAccessList) {
 		this.writeAccessList = writeAccessList;
 	}
-	
-	
+
 	/**
 	 * returns a list of all textItems joined to this Entity.
 	 * 
 	 * @return a collection of TextItem objects
 	 */
 	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<TextItem> getTextItems() {
 		if (textItems == null)
 			textItems = new Vector<TextItem>();
@@ -324,14 +320,14 @@ public class Entity implements java.io.Serializable {
 	public void setTextItems(List<TextItem> textItems) {
 		this.textItems = textItems;
 	}
-	
-	
+
 	/**
 	 * returns a list of all integerItems joined to this Entity
 	 * 
 	 * @return a collection of IntegerItem objects
 	 */
 	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<IntegerItem> getIntegerItems() {
 		if (integerItems == null)
 			integerItems = new Vector<IntegerItem>();
@@ -348,6 +344,7 @@ public class Entity implements java.io.Serializable {
 	 * @return a collection of DoubleItem objects
 	 */
 	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<DoubleItem> getDoubleItems() {
 		if (doubleItems == null)
 			doubleItems = new Vector<DoubleItem>();
@@ -364,6 +361,7 @@ public class Entity implements java.io.Serializable {
 	 * @return a collection of CalendarItem objects
 	 */
 	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<CalendarItem> getCalendarItems() {
 		if (calendarItems == null)
 			calendarItems = new Vector<CalendarItem>();
@@ -374,39 +372,4 @@ public class Entity implements java.io.Serializable {
 		this.calendarItems = calendarItems;
 	}
 
-	
-	
-	
-	
-	/*
-	@ElementCollection(fetch = FetchType.LAZY)
-	public List<TextItem> getTextItems() {
-		return textItems;
-	}
-
-	public void setTextItems(List<TextItem> textItems) {
-		this.textItems = textItems;
-	}
-	*/
-
-	
-	/*
-	@ElementCollection(fetch = FetchType.LAZY)
-	public Map<String, List<String>> getTextItems() {
-		return textItems;
-	}
-
-	public void setTextItems(Map<String,List<String>> textItems) {
-		this.textItems = textItems;
-	}
-
-	@ElementCollection(fetch = FetchType.LAZY)
-	public Map<String, List<Integer>> getIntegerItems() {
-		return integerItems;
-	}
-
-	public void setIntegerItems(Map<String, List<Integer>> integerItems) {
-		this.integerItems = integerItems;
-	}
-	*/
 }

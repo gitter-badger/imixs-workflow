@@ -35,11 +35,11 @@ import javax.persistence.*;
  * A TextItem is a subdata item of the data object class Entity. These subdata
  * types are used to extract single attributes of an ItemCollection from the
  * data Attribute of an Entity outside to separate entity ejbs. As both - the
- * Entity and the SubDataItem are Entity EJBs this facilitate the possibility
- * of a object-relational data mapping into different table.
+ * Entity and the SubDataItem are Entity EJBs this facilitate the possibility of
+ * a object-relational data mapping into different table.
  * 
  * @see org.imixs.workflow.jee.jpa.Entity
- * @author  Ralph Soika
+ * @author Ralph Soika
  * @version 1.0
  * 
  */
@@ -47,7 +47,7 @@ import javax.persistence.*;
 public class TextItem implements java.io.Serializable {
 
 	/**
-	 *  default serial id
+	 * default serial id
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -59,6 +59,9 @@ public class TextItem implements java.io.Serializable {
 
 	public String itemName;
 
+	@Column(name = "ENTITY_ID")
+	private String entityId;
+
 	@SuppressWarnings("unused")
 	private TextItem() {
 	}
@@ -68,13 +71,10 @@ public class TextItem implements java.io.Serializable {
 		itemName = name;
 	}
 
-	
-	
-	
 	@Override
 	public int hashCode() {
-		return ((itemValue+itemName).hashCode());
-		//return super.hashCode();
+		return ((itemValue + itemName).hashCode());
+		// return super.hashCode();
 	}
 
 	@Override
@@ -86,11 +86,10 @@ public class TextItem implements java.io.Serializable {
 
 		TextItem aItem = (TextItem) obj;
 		// test if null objects
-		if (aItem.itemName==null || aItem.itemValue==null)
+		if (aItem.itemName == null || aItem.itemValue == null)
 			return false;
-		
-		return (aItem.itemName.equals(itemName) && aItem.itemValue
-				.equals(itemValue));
+
+		return (aItem.itemName.equals(itemName) && aItem.itemValue.equals(itemValue));
 
 	}
 

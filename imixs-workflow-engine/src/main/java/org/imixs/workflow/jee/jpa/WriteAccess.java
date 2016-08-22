@@ -27,9 +27,9 @@
 
 package org.imixs.workflow.jee.jpa;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
 
 /**
  * A AccessEntity defines a single Entry in the Access List of the Entity Class.
@@ -46,15 +46,18 @@ import javax.persistence.Id;
 public class WriteAccess implements java.io.Serializable {
 
 	/**
-	 *  default serial id
+	 * default serial id
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
 	private int id;
-	
+
 	private String value;
+
+	@Column(name = "ENTITY_ID")
+	private String entityId;
 
 	@SuppressWarnings("unused")
 	private WriteAccess() {
@@ -71,7 +74,5 @@ public class WriteAccess implements java.io.Serializable {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	
-	
+
 }

@@ -50,7 +50,7 @@ import java.util.*;
 public class CalendarItem implements java.io.Serializable {
 
 	/**
-	 *  default serial id
+	 * default serial id
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -62,6 +62,9 @@ public class CalendarItem implements java.io.Serializable {
 	public Calendar itemValue;
 
 	public String itemName;
+
+	@Column(name = "ENTITY_ID")
+	private String entityId;
 
 	@SuppressWarnings("unused")
 	private CalendarItem() {

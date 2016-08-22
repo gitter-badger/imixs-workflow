@@ -27,6 +27,7 @@
 
 package org.imixs.workflow.jee.jpa;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -45,15 +46,18 @@ import javax.persistence.Id;
 public class ReadAccess implements java.io.Serializable {
 
 	/**
-	 *  default serial id
+	 * default serial id
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
 	private int id;
-	
+
 	private String value;
+
+	@Column(name = "ENTITY_ID")
+	private String entityId;
 
 	@SuppressWarnings("unused")
 	private ReadAccess() {
@@ -62,7 +66,7 @@ public class ReadAccess implements java.io.Serializable {
 	public ReadAccess(String value) {
 		this.value = value;
 	}
-	
+
 	public String getValue() {
 		return value;
 	}
@@ -70,6 +74,5 @@ public class ReadAccess implements java.io.Serializable {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	
+
 }

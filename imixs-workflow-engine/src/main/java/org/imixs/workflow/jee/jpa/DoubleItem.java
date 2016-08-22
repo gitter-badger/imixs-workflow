@@ -61,6 +61,9 @@ public class DoubleItem implements java.io.Serializable {
 
 	public String itemName;
 
+	@Column(name = "ENTITY_ID")
+	private String entityId;
+
 	@SuppressWarnings("unused")
 	private DoubleItem() {
 	}
