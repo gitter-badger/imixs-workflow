@@ -92,7 +92,7 @@ import org.imixs.workflow.WorkflowKernel;
  * index Properties. Its recommended to use the EntityService which acts as a
  * session facade to manage instances of ItemCollection in a database system.
  * <p>
- * Notice: All relationships are marked as FetchType=EAGER. This is because the
+ * Notice: All relationships are marked as FetchType=LAZY. This is because the
  * load and find Methods of the EntiyServiceBean do a clear() call to the
  * PersitenceContext because the implodeEntity() method of the EntityServiceBean
  * will modifies the values of an entity. So the Entity needs to be detached
@@ -255,7 +255,7 @@ public class Entity implements java.io.Serializable {
 	 * @return Map
 	 */
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
+	@Basic(fetch = FetchType.EAGER)
 	public Map<String, List<Object>> getData() {
 		return data;
 	}
@@ -270,11 +270,11 @@ public class Entity implements java.io.Serializable {
 	}
 
 	/**
-	 * ReadAccess list is loaded eager as this need to be check on every access
+	 * ReadAccess list 
 	 * 
 	 * @return ReadAccess list for the entity
 	 */
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="ENTITY_ID", referencedColumnName="ID")
 	public List<ReadAccess> getReadAccessList() {
 		if (readAccessList == null)
@@ -292,7 +292,7 @@ public class Entity implements java.io.Serializable {
 	 * 
 	 * @return WriteAccess list for the entity
 	 */
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name="ENTITY_ID", referencedColumnName="ID")
 	public List<WriteAccess> getWriteAccessList() {
 		if (writeAccessList == null)
@@ -309,7 +309,7 @@ public class Entity implements java.io.Serializable {
 	 * 
 	 * @return a collection of TextItem objects
 	 */
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<TextItem> getTextItems() {
 		if (textItems == null)
@@ -326,7 +326,7 @@ public class Entity implements java.io.Serializable {
 	 * 
 	 * @return a collection of IntegerItem objects
 	 */
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<IntegerItem> getIntegerItems() {
 		if (integerItems == null)
@@ -343,7 +343,7 @@ public class Entity implements java.io.Serializable {
 	 * 
 	 * @return a collection of DoubleItem objects
 	 */
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<DoubleItem> getDoubleItems() {
 		if (doubleItems == null)
@@ -360,7 +360,7 @@ public class Entity implements java.io.Serializable {
 	 * 
 	 * @return a collection of CalendarItem objects
 	 */
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ENTITY_ID", referencedColumnName = "ID")
 	public List<CalendarItem> getCalendarItems() {
 		if (calendarItems == null)
