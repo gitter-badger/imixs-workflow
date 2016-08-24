@@ -766,7 +766,7 @@ public class EntityService implements EntityServiceRemote {
 	public List<ItemCollection> findAllEntities(String query, int startpos, int maxcount)
 			throws InvalidAccessException {
 
-		long l = 0;
+		long l1 = System.currentTimeMillis();
 
 		logger.fine("[EntityService] findAllEntities - Query=" + query);
 		logger.fine("[EntityService] findAllEntities - Startpos=" + startpos + " maxcount=" + maxcount);
@@ -781,29 +781,26 @@ public class EntityService implements EntityServiceRemote {
 			if (maxcount > 0)
 				q.setMaxResults(maxcount);
 
-			l = System.currentTimeMillis();
+			long l2 = System.currentTimeMillis();
+
 			Collection<Entity> entityList = q.getResultList();
 			logger.fine(
-					"[EntityService] findAllEntities - getResultList in " + (System.currentTimeMillis() - l) + " ms");
+					"findAllEntities - EntityManager getResultList in " + (System.currentTimeMillis() - l2) + " ms");
 
 			if (entityList == null)
 				return vectorResult;
 
-			logger.fine("[EntityService] findAllEntities - ResultList size=" + entityList.size());
-			l = System.currentTimeMillis();
+			logger.fine("findAllEntities - ResultList size=" + entityList.size());
+			l2 = System.currentTimeMillis();
 			for (Entity aEntity : entityList) {
-				/*
-				 * try { manager.refresh(aEntity); } catch
-				 * (EntityNotFoundException ex) { logger.warning(
-				 * "[EntityServiceBean] #issue 102 - refresh() EntityNotFoundException"
-				 * ); aEntity = null; continue; }
-				 */
-
 				// implode the ItemCollection object and add it to the resultset
 				vectorResult.add(implodeEntity(aEntity));
 			}
+			logger.fine(
+					"findAllEntities - implodeEntity list in " + (System.currentTimeMillis() - l2) + " ms");
 
-			logger.fine("[EntityService] findAllEntities in " + (System.currentTimeMillis() - l) + " ms");
+
+			logger.fine("findAllEntities total = " + (System.currentTimeMillis() - l1) + " ms");
 
 		} catch (RuntimeException nre) {
 			throw new InvalidAccessException("[EntityService] Error findAllEntities: '" + query + "' ", nre);
@@ -1786,6 +1783,9 @@ public class EntityService implements EntityServiceRemote {
 	 * 
 	 */
 	private String optimizeQuery(String aQuery) throws InvalidAccessException {
+		long l = 0;
+		l = System.currentTimeMillis();
+
 		// String nameList = "";
 		StringBuffer nameListBuf = new StringBuffer();
 		String nameList = "";
@@ -1793,7 +1793,7 @@ public class EntityService implements EntityServiceRemote {
 		StringTokenizer st = new StringTokenizer(aQuery);
 		// find identifier for Entity
 		if (st.countTokens() < 5)
-			throw new InvalidAccessException("[EntityService] Invalid query format: " + aQuery);
+			throw new InvalidAccessException("Invalid query format: " + aQuery);
 
 		// test if DISTINCT clause is included
 		st.nextToken();
@@ -1805,9 +1805,12 @@ public class EntityService implements EntityServiceRemote {
 		}
 
 		// don't optimize for managers...
-		if (ctx.isCallerInRole(ACCESSLEVEL_MANAGERACCESS))
+		if (ctx.isCallerInRole(ACCESSLEVEL_MANAGERACCESS)) {
+			logger.fine(
+					"optimizeQuery in " + (System.currentTimeMillis() - l) + " ms");
 			return aQuery;
-
+		}
+		
 		// now construct user role list
 		List<String> auserNameList = getUserNameList();
 		for (String auserName : auserNameList) {
@@ -1876,7 +1879,10 @@ public class EntityService implements EntityServiceRemote {
 			aQuery = aNewQuery;
 		}
 
-		logger.fine("Optimized Query=" + aQuery);
+		logger.fine("optimizeQuery final query=" + aQuery);
+		logger.fine(
+				"optimizeQuery total " + (System.currentTimeMillis() - l) + " ms");
+	
 		return aQuery;
 	}
 
